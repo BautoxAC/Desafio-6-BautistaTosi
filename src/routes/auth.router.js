@@ -1,5 +1,5 @@
 import express from 'express'
-import { isUser, isAdmin } from '../middlewares/auth.js'
+import { isUser, isAdmin, AdminCredentials } from '../middlewares/auth.js'
 import passport from 'passport'
 export const authRouter = express.Router()
 
@@ -7,15 +7,15 @@ authRouter.get('/login', (req, res) => {
   return res.render('login', {})
 })
 
-authRouter.post('/login', passport.authenticate('login', { failureRedirect: '/auth/faillogin' }), async (req, res) => {
+authRouter.post('/login', AdminCredentials, passport.authenticate('login', { failureRedirect: '/auth/faillogin' }), async (req, res) => {
   if (!req.user) {
     return res.json({ error: 'invalid credentials' })
   }
   req.session.user = {
-    _id: req.user._id,
+    _id: req.user?._id,
     email: req.user.email,
-    irstName: req.user.firstName,
-    lastName: req.user.lastName,
+    irstName: req.user?.firstName,
+    lastName: req.user?.lastName,
     isAdmin: req.user.isAdmin
   }
   return res.redirect('/products')
@@ -37,7 +37,7 @@ authRouter.get('/logout', (req, res) => {
 authRouter.get('/register', (req, res) => {
   return res.render('register', {})
 })
-authRouter.post('/register', passport.authenticate('register', { failureRedirect: '/auth/failregister' }), (req, res) => {
+authRouter.post('/register', AdminCredentials, passport.authenticate('register', { failureRedirect: '/auth/failregister' }), (req, res) => {
   if (!req.user) {
     return res.json({ error: 'something went wrong' })
   }

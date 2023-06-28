@@ -15,7 +15,6 @@ import { chatRouter } from './routes/chat.router.js'
 import 'dotenv/config'
 import passport from 'passport'
 import { sessionsRouter } from './routes/sessions.router.js'
-import { viewsRouter } from './routes/views.router.js'
 
 const app = express()
 const port = 8080
@@ -61,7 +60,6 @@ app.use('/api/sessions', sessionsRouter)
 app.use('/products', productViewRouter)
 app.use('/carts', cartViewRouter)
 app.use('/auth', authRouter)
-app.use('/', viewsRouter)
 
 // Rutes: SOCKETS
 app.use('/realtimeproducts', productsSocketRouter)
