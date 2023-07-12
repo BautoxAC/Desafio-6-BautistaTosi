@@ -4,6 +4,7 @@ import { CartManagerDB } from './DAO/DB/CartManagerDB.js'
 import { MessageManagerDB } from './DAO/DB/MessageManagerDB.js'
 import { ProductManagerDB } from './DAO/DB/ProductManagerDB.js'
 import { cartModel } from './DAO/models/carts.model.js'
+import { userModel } from './DAO/models/users.model.js'
 import 'dotenv/config'
 // ----------------DIRNAME------------
 import path from 'path'
@@ -23,18 +24,18 @@ const storage = multer.diskStorage({
     cb(null, file.originalname)
   }
 })
-
 export const uploader = multer({ storage })
+// ----------------DIRNAME------------
 export const __filename = fileURLToPath(import.meta.url)
 export const __dirname = path.dirname(__filename)
 
 // -------------Mensaje de status---------------------------
-export function newMessage (status, message, data) {
+export function newMessage(status, message, data) {
   return { status, message, data }
 }
 
 // --------------Socket Server---------------------------
-export function connectSocketServer (httpServer) {
+export function connectSocketServer(httpServer) {
   const socketServer = new Server(httpServer)
   socketServer.on('connection', async (socket) => {
     console.log('cliente conectado')
@@ -68,15 +69,17 @@ export function connectSocketServer (httpServer) {
       socket.emit('msg_front_to_back_deleted', await list.getProducts())
     })
     // vista /products
-    socket.on('add_product_to_cart_front_to_back', async (idProduct) => {
-      const { _id } = await cartModel.findOne({})
+    socket.on('add_product_to_cart_front_to_back', async ({ idProduct, email }) => {
+      const user = await userModel.findOne({ email })
+      const cart = await cartModel.findOne({ _id: user.cart._id })
+      const { _id } = cart
       const { status } = await CartManager.addProduct(_id, idProduct)
       socket.emit('add_product_to_cart_back_to_front', { status, cartId: _id })
     })
   })
 }
 // ------------ MONGO DB ------------------
-export async function connectMongo () {
+export async function connectMongo() {
   try {
     await connect(`${process.env.MONGO_LINK}`)
   } catch (e) {

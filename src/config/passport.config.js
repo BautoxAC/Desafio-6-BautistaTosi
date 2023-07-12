@@ -3,9 +3,11 @@ import GitHubStrategy from 'passport-github2'
 import passport from 'passport'
 import local from 'passport-local'
 import { createHash, isValidPassword } from '../utils.js'
+import { CartManagerDB } from '../DAO/DB/CartManagerDB.js'
 const LocalStrategy = local.Strategy
+const cartManager = new CartManagerDB()
 // ---------------- GITHUB PASSPORT ----------------
-export function iniPassPortLocalAndGithub () {
+export function iniPassPortLocalAndGithub() {
   passport.use(
     'login',
     new LocalStrategy({ usernameField: 'email' }, async (username, password, done) => {
@@ -36,19 +38,22 @@ export function iniPassPortLocalAndGithub () {
       },
       async (req, username, password, done) => {
         try {
-          const { email, firstName, lastName } = req.body
+          const { email, firstName, lastName, age } = req.body
           const user = await userModel.findOne({ email: username })
           if (user) {
             console.log('User already exists')
             return done(null, false)
           }
-
+          const newCart = await cartManager.addCart()
           const newUser = {
             email,
             firstName,
             lastName,
+            age,
             isAdmin: false,
-            password: createHash(password)
+            password: createHash(password),
+            role: 'user',
+            cart: newCart.data._id
           }
           const userCreated = await userModel.create(newUser)
           return done(null, userCreated)
@@ -87,19 +92,19 @@ export function iniPassPortLocalAndGithub () {
           profile.email = emailDetail.email
           const user = await userModel.findOne({ email: profile.email })
           if (!user) {
+            const newCart = await cartManager.addCart()
             const newUser = {
               email: profile.email,
               firstName: profile._json.name || profile._json.login || 'noname',
               lastName: 'nolast',
-              isAdmin: false,
-              password: 'nopass'
+              role: 'user',
+              age: 0,
+              password: 'nopass',
+              cart: newCart.data._id
             }
             const userCreated = await userModel.create(newUser)
-            console.log('User Registration succesful')
             return done(null, userCreated)
           } else {
-            /* hay que cambiar la coleccion de usuarios para que funciones con passport */
-            console.log('User already exists')
             return done(null, user)
           }
         } catch (e) {

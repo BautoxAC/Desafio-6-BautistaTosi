@@ -7,7 +7,7 @@ export class CartManagerDB {
     try {
       const cartFindId = await cartModel.findOne({ _id: id }).populate('products.idProduct').lean()
       if (cartFindId) {
-        return newMessage('success', 'Found successfully', cartFindId.products)
+        return newMessage('success', 'Found successfully', cartFindId.products || [])
       } else {
         return newMessage('failure', 'Cart not Found', '')
       }

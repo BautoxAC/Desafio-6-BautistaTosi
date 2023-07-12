@@ -14,9 +14,11 @@ authRouter.post('/login', AdminCredentials, passport.authenticate('login', { fai
   req.session.user = {
     _id: req.user?._id,
     email: req.user.email,
-    irstName: req.user?.firstName,
+    firstName: req.user?.firstName,
     lastName: req.user?.lastName,
-    isAdmin: req.user.isAdmin
+    role: req.user.role,
+    age: req.user?.age,
+    cart: req.user.cart
   }
   return res.redirect('/products')
 })
@@ -43,10 +45,12 @@ authRouter.post('/register', AdminCredentials, passport.authenticate('register',
   }
   req.session.user = {
     _id: req.user._id,
+    age: req.user.age,
     firstName: req.user.firstName,
     lastName: req.user.lastName,
     email: req.user.email,
-    isAdmin: req.user.isAdmin
+    role: req.user.role,
+    cart: req.user.cart
   }
   return res.redirect('/products')
 })

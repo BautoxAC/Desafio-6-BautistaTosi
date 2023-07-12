@@ -10,6 +10,6 @@ sessionsRouter.get('/githubcallback', passport.authenticate('github', { failureR
   res.redirect('/products')
 })
 
-sessionsRouter.get('/show', (req, res) => {
-  return res.send(JSON.stringify(req.session))
+sessionsRouter.get('/current', (req, res) => {
+  return res.status(200).json({ Session: req.session })
 })

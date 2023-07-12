@@ -6,7 +6,8 @@ const list = new ProductManagerDB()
 productViewRouter.get('/', isUser, async function (req, res) {
   const url = 'http://localhost:8080/products'
   const { limit, page, query, sort } = req.query
-  const { email, isAdmin } = req.session.user
+  const { email, role } = req.session.user
+  const isAdmin = role === 'Admin'
   const pageInfo = await list.getProducts(limit, page, query, sort, url)
   return res.status(200).render('products', { ...pageInfo, email, isAdmin })
 })
