@@ -1,6 +1,6 @@
 # Explicación
 
-Este proyecto es un API básica que sigue las consignas de la segunda preEntrega del proyecto final de CoderHouse funcionando con MongoDB y hay views hechas con handlebars. Ahora tiene un sistema de autenticacion basico con passport local y passport-github en la vista /auth/register y /auth/login
+Este proyecto es un API básica que sigue las consignas de la segunda preEntrega del proyecto final de CoderHouse y la segunda practica integradora funcionando con MongoDB y hay views hechas con handlebars. Ahora tiene un sistema de autenticacion basico con passport local y passport-github en la vista /auth/register y /auth/login
 
 ### Link de postman (donde estan se encuentran los endpoints del API)
 
@@ -11,6 +11,8 @@ Este proyecto es un API básica que sigue las consignas de la segunda preEntrega
 /auth/register para registrarse en la DB
 
 /auth/login para iniciar sesion
+
+/api/sessions/current para ver tu sesion
 
 /products es una vista de los productos con paginacion que puede recibir por query de la url: limit, sort, category y page
 

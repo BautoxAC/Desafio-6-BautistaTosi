@@ -30,12 +30,12 @@ export const __filename = fileURLToPath(import.meta.url)
 export const __dirname = path.dirname(__filename)
 
 // -------------Mensaje de status---------------------------
-export function newMessage(status, message, data) {
+export function newMessage (status, message, data) {
   return { status, message, data }
 }
 
 // --------------Socket Server---------------------------
-export function connectSocketServer(httpServer) {
+export function connectSocketServer (httpServer) {
   const socketServer = new Server(httpServer)
   socketServer.on('connection', async (socket) => {
     console.log('cliente conectado')
@@ -79,7 +79,7 @@ export function connectSocketServer(httpServer) {
   })
 }
 // ------------ MONGO DB ------------------
-export async function connectMongo() {
+export async function connectMongo () {
   try {
     await connect(`${process.env.MONGO_LINK}`)
   } catch (e) {

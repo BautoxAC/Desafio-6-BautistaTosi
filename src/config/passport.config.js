@@ -7,7 +7,7 @@ import { CartManagerDB } from '../DAO/DB/CartManagerDB.js'
 const LocalStrategy = local.Strategy
 const cartManager = new CartManagerDB()
 // ---------------- GITHUB PASSPORT ----------------
-export function iniPassPortLocalAndGithub() {
+export function iniPassPortLocalAndGithub () {
   passport.use(
     'login',
     new LocalStrategy({ usernameField: 'email' }, async (username, password, done) => {
